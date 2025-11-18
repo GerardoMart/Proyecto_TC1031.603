@@ -1,0 +1,5 @@
+Lewandowski 9 Delantero 35 45
+Pedri 8 Mediocampista 21 12
+Gavi 6 Mediocampista 20 10
+Araujo 4 Defensa 26 5
+TerStegen 1 Portero 32 0
