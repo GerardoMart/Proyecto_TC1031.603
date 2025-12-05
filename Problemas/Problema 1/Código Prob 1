@@ -1,0 +1,91 @@
+#include <vector>
+
+using namespace std;
+
+class Solution {
+public:
+    int countElements(vector<int>& nums, int k) {
+        int n = nums.size();
+        if (k == 0) return n;
+        if (k >= n) return 0;
+        
+        quickSort(nums, 0, n - 1); // O (n log n)
+        
+        int count = 0;
+        
+        for (int i = 0; i < n; ) {
+            int j = i + 1;
+            while (j < n && nums[j] == nums[i]) {
+                j++;
+            }
+            int mayores = n - j;
+            if (mayores >= k) {
+                count += (j - i);
+            }
+            
+            i = j;
+        }
+        
+        return count;
+    } // Complejidad total O (n log n)
+private:
+    void quickSort(vector<int>& arr, int left, int right) {
+        if (right - left < 16) {
+            insertionSort(arr, left, right);
+            return;
+        }
+        
+        if (left < right) {
+            int pivotIndex = partition(arr, left, right);
+            quickSort(arr, left, pivotIndex - 1);
+            quickSort(arr, pivotIndex + 1, right);
+        }
+    } // Promedio (n log n), Peor caso O(n^2)
+    
+    int partition(vector<int>& arr, int left, int right) {
+        int mid = left + (right - left) / 2;
+        
+        if (arr[left] > arr[mid]) swap(arr[left], arr[mid]);
+        if (arr[left] > arr[right]) swap(arr[left], arr[right]);
+        if (arr[mid] > arr[right]) swap(arr[mid], arr[right]);
+        
+        swap(arr[mid], arr[right - 1]);
+        int pivot = arr[right - 1];
+        
+        int i = left;
+        int j = right - 1;
+        
+        while (true) {
+            while (arr[++i] < pivot);
+            while (arr[--j] > pivot);
+            
+            if (i < j) {
+                swap(arr[i], arr[j]);
+            } else {
+                break;
+            }
+        }
+        
+        swap(arr[i], arr[right - 1]);
+        return i;
+    } // Complejidad O (n)
+    
+    void insertionSort(vector<int>& arr, int left, int right) {
+        for (int i = left + 1; i <= right; i++) {
+            int key = arr[i];
+            int j = i - 1;
+            
+            while (j >= left && arr[j] > key) {
+                arr[j + 1] = arr[j];
+                j--;
+            }
+            arr[j + 1] = key;
+        }
+    } // Complejidad O (n^2)
+    
+    void swap(int& a, int& b) {
+        int temp = a;
+        a = b;
+        b = temp;
+    } // Complejidad O (1)
+};
