@@ -1,0 +1,51 @@
+class FindElements {
+private:
+    TreeNode* root;
+    
+    void recoverTree(TreeNode* node, int val) {
+        if (!node) return;
+        node->val = val;
+        recoverTree(node->left, 2 * val + 1);
+        recoverTree(node->right, 2 * val + 2);
+    }
+    
+public:
+    FindElements(TreeNode* root) : root(root) {
+        recoverTree(root, 0);
+    }
+    
+    bool find(int target) {
+        if (target < 0) return false;
+
+        vector<int> path;
+        while (target > 0) {
+            path.push_back(target);
+
+            target = (target - 1) / 2;
+        }
+
+        reverse(path.begin(), path.end());
+
+        TreeNode* current = root;
+        for (int val : path) {
+            if (!current) return false;
+
+            if (current->val == val) {
+                return true;
+            }
+
+            int leftVal = 2 * current->val + 1;
+            int rightVal = 2 * current->val + 2;
+            
+            if (val == leftVal) {
+                current = current->left;
+            } else if (val == rightVal) {
+                current = current->right;
+            } else {
+                return false;
+            }
+        }
+        
+        return current != nullptr;
+    }
+};
